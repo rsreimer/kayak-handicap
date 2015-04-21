@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+</head>
+<body>
+
+<div ng-controller="raceForm as race">
+    <div ng-repeat="participation in race.participations">
+        <select ng-options="boatType.name for boatType in race.boatTypes track by boatType.id" ng-model="participation.boatType"></select>
+
+        <select ng-repeat="i in race.getSeats(participation.boatType) track by $index"
+                ng-options="member.name for member in race.members track by member.id"
+                ng-model="participation.participants[$index]"></select>
+
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.0/angular.js"></script>
+<script>
+    angular.module('app', [])
+    angular.module('app').controller('raceForm', function(){
+        var ctrl = this;
+
+        ctrl.members = [
+            {name: 'a', id: 1},
+            {name: 'b', id: 2},
+            {name: 'c', id: 3},
+            {name: 'd', id: 4},
+            {name: 'e', id: 5},
+            {name: 'f', id: 6},
+            {name: 'g', id: 7}
+        ]
+
+        ctrl.boatTypes = [
+            {name: 'K1', seats: 1},
+            {name: 'K2', seats: 2},
+            {name: 'K4', seats: 4}
+        ]
+
+        ctrl.participations = []
+
+        ctrl.createParticipation = function () {
+            ctrl.participations.push({
+                boatType: ctrl.boatTypes[0],
+                participants: [ctrl.members[0]]
+            })
+        }
+
+        ctrl.getSeats = function(boatType) {
+            return new Array(boatType.seats);
+        }
+
+        ctrl.createParticipation();
+    })
+</script>
+</body>
+</html>
