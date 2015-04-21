@@ -5,10 +5,10 @@ var gulp = require('gulp'),
 
 function browserSyncInit(baseDir, files) {
     browserSync.instance = browserSync.init(files, {
-        startPath: '/',
         server: {
             baseDir: baseDir
-        }
+        },
+        port: 80
     });
 }
 
