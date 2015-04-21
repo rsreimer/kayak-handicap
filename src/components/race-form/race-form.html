@@ -1,0 +1,8 @@
+<div ng-repeat="participation in race.participations">
+    <select ng-options="boatType.name for boatType in race.boatTypes track by boatType.id" ng-model="participation.boatType"></select>
+
+    <select ng-repeat="i in race.getSeats(participation.boatType) track by $index"
+            ng-options="member.name for member in race.members track by member.id"
+            ng-model="participation.participants[$index]"></select>
+
+</div>
