@@ -7,40 +7,49 @@ app
       restrict: 'E',
       scope: {},
       bindToController: true,
-      controllerAs: 'race',
+      controllerAs: 'form',
       controller: function () {
         var ctrl = this;
 
         ctrl.members = [
-          {name: 'a', id: 1},
-          {name: 'b', id: 2},
-          {name: 'c', id: 3},
-          {name: 'd', id: 4},
-          {name: 'e', id: 5},
-          {name: 'f', id: 6},
-          {name: 'g', id: 7}
+          {name: 'Person0 Lastname', id: 1},
+          {name: 'Person1 Lastname', id: 2},
+          {name: 'Person2 Lastname', id: 3},
+          {name: 'Person3 Lastname', id: 4},
+          {name: 'Person4 Lastname', id: 5},
+          {name: 'Person5 Lastname', id: 6}
         ];
 
         ctrl.boatTypes = [
-          {name: 'K1', seats: 1},
-          {name: 'K2', seats: 2},
-          {name: 'K4', seats: 4}
+          {id: 1, name: 'K1', seats: 1},
+          {id: 2, name: 'K2', seats: 2},
+          {id: 3, name: 'K4', seats: 4}
         ];
 
-        ctrl.participations = [];
+        ctrl.race = {
+          date: new Date(),
+          participations: [],
+          timekeepers: []
+        };
 
-        ctrl.createParticipation = function () {
-          ctrl.participations.push({
+        ctrl.addParticipation = function () {
+          ctrl.race.participations.push({
             boatType: ctrl.boatTypes[0],
             participants: [ctrl.members[0]]
           })
         };
 
+        ctrl.addTimekeeper = function () {
+          ctrl.race.timekeepers.push(ctrl.members[0])
+        };
+
+
         ctrl.getSeats = function(boatType) {
           return new Array(boatType.seats);
         };
 
-        ctrl.createParticipation();
+        if (ctrl.race.participations.length == 0)
+          ctrl.addParticipation();
       }
     }
   });

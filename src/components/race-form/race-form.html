@@ -1,8 +1,70 @@
-<div ng-repeat="participation in race.participations">
-    <select ng-options="boatType.name for boatType in race.boatTypes track by boatType.id" ng-model="participation.boatType"></select>
+<div class="race-form">
+    <h2 class="form-inline">Handicap race <input class="form-control" ng-model="form.race.date" type="date"></h2>
 
-    <select ng-repeat="i in race.getSeats(participation.boatType) track by $index"
-            ng-options="member.name for member in race.members track by member.id"
-            ng-model="participation.participants[$index]"></select>
+    <hr>
 
+    <h3>Timekeepers</h3>
+    <div class="form-group">
+        <button class="btn btn-default" ng-click="form.addTimekeeper()"><span class="glyphicon glyphicon-plus"></span> Add timekeeper</button>
+    </div>
+
+    <div class="form-inline">
+        <div class="form-group" ng-repeat="timekeeper in form.race.timekeepers track by $index">
+            <div class="input-group">
+                <select class="form-control"
+                        ng-options="member.name for member in form.members track by member.id"
+                        ng-model="form.race.timekeepers[$index]"></select>
+                <span class="input-group-addon" ng-click="form.race.timekeepers.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+    </div>
+
+    <h3>Participations</h3>
+    <div class="form-group">
+        <button class="btn btn-default" ng-click="form.addParticipation()"><span class="glyphicon glyphicon-plus"></span> Add participation</button>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Boat type</th>
+            <th>Participant</th>
+            <th>Start</th>
+            <th>End</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="participation in form.race.participations track by $index">
+            <td>
+                <!-- Boat type -->
+                <select class="form-control"
+                        ng-options="boatType.name for boatType in form.boatTypes track by boatType.id"
+                        ng-model="participation.boatType"></select>
+            </td>
+
+            <td>
+                <!-- Participants -->
+                <span ng-repeat="i in form.getSeats(participation.boatType) track by $index">
+                    <select class="form-control"
+                            ng-options="member.name for member in form.members track by member.id"
+                            ng-model="participation.participants[$index]"></select>
+                </span>
+            </td>
+            <td>
+                <!-- Start time -->
+                <time-input value="participation.start"></time-input>
+            </td>
+            <td>
+                <!-- End time -->
+                <time-input value="participation.end"></time-input>
+            </td>
+            <td><button class="btn btn-default pull-right" ng-click="form.race.participations.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></button></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="well">
+        <button class="btn btn-primary" ng-click="form.save()">Save race</button>
+    </div>
 </div>
