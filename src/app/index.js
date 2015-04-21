@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router'])
+var app = angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router', 'ui.mask'])
 
   .run(function($rootScope, $location, $window){
     // Google Analytics

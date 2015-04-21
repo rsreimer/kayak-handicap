@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
 
     <!-- build:css({.tmp,src}) styles/app.css -->
-      <link rel="stylesheet" href="app/index.css">
+    <link rel="stylesheet" href="components/time-input/time-input.css">
     <!-- endbuild -->
   </head>
   <body>
@@ -25,10 +25,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0-rc.0/angular-touch.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.min.js"></script>
 
+    <!-- build:js scripts/vendor.js -->
+    <script src="vendor/ui-utils.min.js"></script>
+    <!-- endbuild -->
+
     <!-- build:js({.tmp,src}) scripts/app.js -->
     <script src="app/index.js"></script>
 
     <script src="components/race-form/race-form.js"></script>
+    <script src="components/time-input/time-input.js"></script>
 
     <!-- inject:partials -->
     <!-- angular templates will be automaticaly converted in js and inserted here -->
