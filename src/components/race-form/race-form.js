@@ -1,7 +1,7 @@
-'use strict';
-
-app
+angular.module('kayak-handicap')
   .directive('raceForm', function () {
+    "use strict";
+
     return {
       templateUrl: 'components/race-form/race-form.html',
       restrict: 'E',
@@ -36,11 +36,11 @@ app
           ctrl.race.participations.push({
             boatType: ctrl.boatTypes[0],
             participants: [ctrl.members[0]]
-          })
+          });
         };
 
         ctrl.addTimekeeper = function () {
-          ctrl.race.timekeepers.push(ctrl.members[0])
+          ctrl.race.timekeepers.push(ctrl.members[0]);
         };
 
 
@@ -48,8 +48,8 @@ app
           return new Array(boatType.seats);
         };
 
-        if (ctrl.race.participations.length == 0)
+        if (ctrl.race.participations.length === 0)
           ctrl.addParticipation();
       }
-    }
+    };
   });

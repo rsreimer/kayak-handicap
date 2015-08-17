@@ -1,8 +1,7 @@
-'use strict';
-
-var app = angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router', 'ui.mask'])
-
+angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router', 'ui.mask'])
   .run(function($rootScope, $location, $window){
+    "use strict";
+
     // Google Analytics
     $rootScope.$on('$stateChangeSuccess', function(){
       if (!$window.ga) return;
@@ -11,6 +10,8 @@ var app = angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router',
   })
 
   .config(function ($stateProvider, $urlRouterProvider) {
+    "use strict";
+
     $stateProvider
       .state('addRace', {
         url: '/',

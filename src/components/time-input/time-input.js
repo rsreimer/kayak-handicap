@@ -1,7 +1,7 @@
-'use strict';
-
-app
+angular.module('kayak-handicap')
   .directive('timeInput', function () {
+    "use strict";
+
     return {
       templateUrl: 'components/time-input/time-input.html',
       restrict: 'E',
@@ -21,8 +21,7 @@ app
               newValue.substr(0, 2) + ':' +
               newValue.substr(2, 2) + ':' +
               newValue.substr(4, 2);
-        })
-
+        });
       }
-    }
+    };
   });
