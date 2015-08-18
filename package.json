@@ -1,8 +1,7 @@
 {
-  "name": "fireconnect",
+  "name": "kayak-handicap",
   "private": true,
   "version": "0.0.0",
-  "dependencies": {},
   "devDependencies": {
     "del": "^1.1.1",
     "gulp": "^3.8.11",
@@ -11,6 +10,7 @@
     "gulp-cachebust": "0.0.5",
     "gulp-cached": "^1.1.0",
     "gulp-concat": "^2.5.2",
+    "gulp-csso": "^1.0.0",
     "gulp-jshint": "^1.10.0",
     "gulp-minify-html": "^1.0.4",
     "gulp-ng-annotate": "^1.1.0",
