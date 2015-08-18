@@ -1,5 +1,4 @@
 // TODO: Validate that only changed files are compiled/minified. Cached and remember should do it.
-// TODO: Minify scss with csso.
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -71,6 +70,7 @@ var gulp = require('gulp'),
   cache = require('gulp-cached'),
   concat = require('gulp-concat'),
   uglify = require('gulp-uglify'),
+  csso = require('gulp-csso'),
   CacheBuster = require('gulp-cachebust'),
   cachebust = new CacheBuster(),
   KarmaServer = require('karma').Server;
@@ -102,6 +102,7 @@ gulp.task('build-css', ['clean'], function() {
     .pipe(sourcemaps.init())
     .pipe(cache('style'))
     .pipe(sass())
+    .pipe(csso())
     .pipe(remember('style'))
     .pipe(concat(app.output.style))
     .pipe(cachebust.resources())
