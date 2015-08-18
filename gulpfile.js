@@ -1,5 +1,4 @@
 // TODO: Validate that only changed files are compiled/minified. Cached and remember should do it.
-// TODO: Validate that ES2015 babel works.
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -14,14 +13,29 @@ var app = {
     index: './src/index.html',
     style: './src/**/*.sass',
     script: './src/**/*.js',
-    template: './src/components/**/*.html'
+    template: './src/components/**/*.html',
+    vendor: {
+      style: [
+        './bower_components/bootstrap/dist/css/bootstrap.min.css'
+      ],
+      script: [
+        './bower_components/angular/angular.min.js',
+        './bower_components/angular-animate/angular-animate.min.js',
+        './bower_components/angular-touch/angular-touch.min.js',
+        './bower_components/angular-ui-mask/dist/mask.min.js',
+        './bower_components/angular-ui-router/release/angular-ui-router.min.js'
+      ]
+    }
   },
   output: {
     folder: './dist',
     index: 'index.html',
     style: 'app.css',
     script: 'app.js',
-    sourceMapFolder: './'
+    vendor: {
+      style: 'vendor.css',
+      script: 'vendor.js'
+    }
   },
   test: {
     spec: './test',
@@ -72,6 +86,12 @@ gulp.task('clean', function (cb) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('build-css', ['clean'], function() {
+  // Vendor
+  gulp.src(app.source.vendor.style)
+    .pipe(concat(app.output.vendor.style))
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(app.output.folder));
+
   return gulp.src(app.source.style)
     .pipe(sourcemaps.init())
     .pipe(cache('style'))
@@ -79,7 +99,7 @@ gulp.task('build-css', ['clean'], function() {
     .pipe(remember('style'))
     .pipe(concat(app.output.style))
     .pipe(cachebust.resources())
-    .pipe(sourcemaps.write(app.output.sourceMapFolder))
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(app.output.folder));
 });
 
@@ -115,6 +135,13 @@ gulp.task('test', ['build-js'], function(done) {
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('build-js', ['clean'], function() {
+  // Vendor
+  gulp.src(app.source.vendor.script)
+    .pipe(concat(app.output.vendor.script))
+    .pipe(cachebust.resources())
+    .pipe(gulp.dest(app.output.folder));
+
+  // Template cache
   var templates = gulp.src(app.source.template)
     .pipe(cache('template'))
     .pipe(minifyHtml({
@@ -127,9 +154,7 @@ gulp.task('build-js', ['clean'], function() {
       module: app.module
     }));
 
-  var scripts = gulp.src(app.source.script);
-
-  return merge(scripts, templates)
+  return merge(gulp.src(app.source.script), templates)
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(cache('script'))
     .pipe(babel())
@@ -138,7 +163,7 @@ gulp.task('build-js', ['clean'], function() {
     .pipe(remember('script'))
     .pipe(concat(app.output.script))
     .pipe(cachebust.resources())
-    .pipe(sourcemaps.write(app.output.sourceMapFolder))
+    .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest(app.output.folder));
 });
 
@@ -167,7 +192,7 @@ gulp.task('build', ['clean', 'build-css', 'jshint', 'build-js'], function() {
 
 gulp.task('watch', function() {
   var src = app.source;
-  return gulp.watch([src.index, src.script, src.style, src.template], ['build']);
+  return gulp.watch([src.index, src.script, src.style, src.template, src.vendor.script, src.vendor.style], ['build']);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
