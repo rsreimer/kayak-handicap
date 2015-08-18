@@ -1,5 +1,5 @@
-// TODO: validate that only changed files are compiled/minified. Cache and remember should do it.
-// TODO: ES2015 babel support.
+// TODO: Validate that only changed files are compiled/minified. Cached and remember should do it.
+// TODO: Validate that ES2015 babel works.
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -38,6 +38,7 @@ var app = {
 
 var gulp = require('gulp'),
   webserver = require('gulp-webserver'),
+  babel = require('gulp-babel'),
   del = require('del'),
   sass = require('gulp-sass'),
   jshint = require('gulp-jshint'),
@@ -131,6 +132,7 @@ gulp.task('build-js', ['clean'], function() {
   return merge(scripts, templates)
     .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(cache('script'))
+    .pipe(babel())
     .pipe(ngAnnotate())
     .pipe(uglify())
     .pipe(remember('script'))
