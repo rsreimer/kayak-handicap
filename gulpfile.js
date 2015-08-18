@@ -1,5 +1,5 @@
-// TODO: Only compiled new files.
-// TODO: ES2015 babel support
+// TODO: validate that only changed files are compiled/minified. Cache and remember should do it.
+// TODO: ES2015 babel support.
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -46,11 +46,13 @@ var gulp = require('gulp'),
   minifyHtml = require('gulp-minify-html'),
   merge = require('merge-stream'),
   angularTemplateCache = require("gulp-angular-templatecache"),
+  remember = require('gulp-remember'),
+  cache = require('gulp-cached'),
   concat = require('gulp-concat'),
   uglify = require('gulp-uglify'),
-  gutil = require('gulp-util'),
   CacheBuster = require('gulp-cachebust'),
-  cachebust = new CacheBuster();
+  cachebust = new CacheBuster(),
+  KarmaServer = require('karma').Server;
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -71,9 +73,10 @@ gulp.task('clean', function (cb) {
 gulp.task('build-css', ['clean'], function() {
   return gulp.src(app.source.style)
     .pipe(sourcemaps.init())
-    .pipe(concat(app.output.style))
+    .pipe(cache('style'))
     .pipe(sass())
-    .on('error', gutil.log)
+    .pipe(remember('style'))
+    .pipe(concat(app.output.style))
     .pipe(cachebust.resources())
     .pipe(sourcemaps.write(app.output.sourceMapFolder))
     .pipe(gulp.dest(app.output.folder));
@@ -87,6 +90,7 @@ gulp.task('build-css', ['clean'], function() {
 
 gulp.task('jshint', function() {
   gulp.src(app.source.script)
+    .pipe(cache('jshint'))
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });
@@ -98,9 +102,7 @@ gulp.task('jshint', function() {
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('test', ['build-js'], function(done) {
-  var Server = require('karma').Server;
-
-  new Server({
+  new KarmaServer({
     configFile: app.test.karmaConf
   }, done).start();
 });
@@ -113,11 +115,13 @@ gulp.task('test', ['build-js'], function(done) {
 
 gulp.task('build-js', ['clean'], function() {
   var templates = gulp.src(app.source.template)
+    .pipe(cache('template'))
     .pipe(minifyHtml({
       empty: true,
       spare: true,
       quotes: true
     }))
+    .pipe(remember('template'))
     .pipe(angularTemplateCache({
       module: app.module
     }));
@@ -126,10 +130,11 @@ gulp.task('build-js', ['clean'], function() {
 
   return merge(scripts, templates)
     .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(concat(app.output.script))
+    .pipe(cache('script'))
     .pipe(ngAnnotate())
     .pipe(uglify())
-    .on('error', gutil.log)
+    .pipe(remember('script'))
+    .pipe(concat(app.output.script))
     .pipe(cachebust.resources())
     .pipe(sourcemaps.write(app.output.sourceMapFolder))
     .pipe(gulp.dest(app.output.folder));
