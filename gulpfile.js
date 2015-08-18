@@ -3,26 +3,36 @@
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// configuration
+// App specific configuration
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
 var app = {
-  moduleName: 'kayak-handicap'
+  module: 'kayak-handicap',
+  port: 8000,
+  source: {
+    index: './src/index.html',
+    style: './src/**/*.sass',
+    script: './src/**/*.js',
+    template: './src/components/**/*.html'
+  },
+  output: {
+    folder: './dist',
+    index: 'index.html',
+    style: 'app.css',
+    script: 'app.js',
+    sourceMapFolder: './'
+  },
+  test: {
+    spec: './test',
+    karmaConf: __dirname + '/karma.conf.js'
+  }
 };
 
-var paths = {
-  output: './dist',
-  index: './src/index.html',
-  styles: './src/**/*.sass',
-  scripts: './src/**/*.js',
-  templates: './src/components/**/*.html',
-  tests: './test'
-};
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// loads modules
+// Load modules
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,7 +40,6 @@ var gulp = require('gulp'),
   webserver = require('gulp-webserver'),
   del = require('del'),
   sass = require('gulp-sass'),
-  karma = require('gulp-karma'),
   jshint = require('gulp-jshint'),
   sourcemaps = require('gulp-sourcemaps'),
   ngAnnotate = require('gulp-ng-annotate'),
@@ -39,157 +48,141 @@ var gulp = require('gulp'),
   angularTemplateCache = require("gulp-angular-templatecache"),
   concat = require('gulp-concat'),
   uglify = require('gulp-uglify'),
-  gutil = require('gulp-util');
-
-var CacheBuster = require('gulp-cachebust');
-var cachebust = new CacheBuster();
+  gutil = require('gulp-util'),
+  CacheBuster = require('gulp-cachebust'),
+  cachebust = new CacheBuster();
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// cleans the build output
+// Clean the build output
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('clean', function (cb) {
-  del([
-    paths.output
-  ], cb);
+  del([app.output.folder], cb);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// runs sass, creates css source maps
+// Compile sass
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('build-css', ['clean'], function() {
-  return gulp.src(paths.styles)
+  return gulp.src(app.source.style)
     .pipe(sourcemaps.init())
+    .pipe(concat(app.output.style))
     .pipe(sass())
+    .on('error', gutil.log)
     .pipe(cachebust.resources())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(paths.output));
+    .pipe(sourcemaps.write(app.output.sourceMapFolder))
+    .pipe(gulp.dest(app.output.folder));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// fills in the Angular template cache, to prevent loading the html templates via
-// separate http requests
-//
-/////////////////////////////////////////////////////////////////////////////////////
-
-gulp.task('build-template-cache', ['clean'], function() {
-});
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// runs jshint
+// Run jshint
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('jshint', function() {
-  gulp.src(paths.scripts)
+  gulp.src(app.source.script)
     .pipe(jshint())
-    .pipe(jshint.reporter('default'));
+    .pipe(jshint.reporter('jshint-stylish'));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// runs karma tests
+// Run karma tests
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('test', ['build-js'], function() {
-  return gulp.src(paths.test)
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'run'
-    }))
-    .on('error', function(err) {
-      console.log('karma tests failed: ' + err);
-      throw err;
-    });
+gulp.task('test', ['build-js'], function(done) {
+  var Server = require('karma').Server;
+
+  new Server({
+    configFile: app.test.karmaConf
+  }, done).start();
 });
+
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// Build a minified Javascript bundle
+// Minify Javascript and cache templates
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('build-js', ['clean'], function() {
-  var templates = gulp.src(paths.templates)
+  var templates = gulp.src(app.source.template)
     .pipe(minifyHtml({
       empty: true,
       spare: true,
       quotes: true
     }))
     .pipe(angularTemplateCache({
-      module: app.moduleName
+      module: app.module
     }));
 
-  var scripts = gulp.src(paths.scripts);
+  var scripts = gulp.src(app.source.script);
 
   return merge(scripts, templates)
     .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(concat('app.js'))
+    .pipe(concat(app.output.script))
     .pipe(ngAnnotate())
     .pipe(uglify())
     .on('error', gutil.log)
     .pipe(cachebust.resources())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(paths.output));
+    .pipe(sourcemaps.write(app.output.sourceMapFolder))
+    .pipe(gulp.dest(app.output.folder));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// full build, applies cache busting to the main page css and js bundles
+// Full build
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build', ['clean', 'build-css', 'build-template-cache', 'jshint', 'build-js'], function() {
-  return gulp.src(paths.index)
+gulp.task('build', ['clean', 'build-css', 'jshint', 'build-js'], function() {
+  return gulp.src(app.source.index)
     .pipe(cachebust.references())
-    .pipe(gulp.dest(paths.output));
+    .pipe(minifyHtml({
+      empty: true,
+      spare: true,
+      quotes: true
+    }))
+    .pipe(gulp.dest(app.output.folder));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// watches file system and triggers a build when a modification is detected
+// Watch file system and rebuild on changes
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('watch', function() {
-  return gulp.watch([paths.index, paths.templates, paths.styles, paths.scripts], ['build']);
+  var src = app.source;
+  return gulp.watch([src.index, src.script, src.style, src.template], ['build']);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// launches a web server that serves files in the current directory
+// Launch web server with livereload
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('webserver', ['watch','build'], function() {
-  gulp.src('.')
+gulp.task('serve', ['watch','build'], function() {
+  gulp.src(app.output.folder)
     .pipe(webserver({
-      livereload: false,
-      directoryListing: true,
-      open: "http://localhost:8000/dist/index.html"
+      port: app.port,
+      livereload: true,
+      fallback: app.output.index,
+      open: 'http://localhost:' + app.port
     }));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
-// launch a build upon modification and publish it to a running server
+// Build and test everything
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('dev', ['watch', 'webserver']);
-
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// builds and tests everything
-//
-/////////////////////////////////////////////////////////////////////////////////////
-
-gulp.task('default', ['build']);
-//gulp.task('default', ['build', 'test']);
+gulp.task('default', ['serve', 'test']);

@@ -3,7 +3,7 @@ angular.module('kayak-handicap')
     "use strict";
 
     return {
-      templateUrl: 'components/race-form/race-form.html',
+      templateUrl: 'race-form/race-form.html',
       restrict: 'E',
       scope: {},
       bindToController: true,

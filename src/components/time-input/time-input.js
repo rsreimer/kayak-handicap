@@ -3,7 +3,7 @@ angular.module('kayak-handicap')
     "use strict";
 
     return {
-      templateUrl: 'components/time-input/time-input.html',
+      templateUrl: 'time-input/time-input.html',
       restrict: 'E',
       scope: {
         value: '='
