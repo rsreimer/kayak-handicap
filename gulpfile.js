@@ -1,4 +1,5 @@
 // TODO: Validate that only changed files are compiled/minified. Cached and remember should do it.
+// TODO: Minify scss with csso.
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -11,7 +12,7 @@ var app = {
   port: 8000,
   source: {
     index: './src/index.html',
-    style: './src/**/*.sass',
+    style: './src/**/*.scss',
     script: './src/**/*.js',
     template: './src/components/**/*.html',
     vendor: {
