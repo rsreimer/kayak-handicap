@@ -26,8 +26,9 @@ angular.module('kayak-handicap')
           {id: 3, name: 'K4', seats: 4}
         ];
 
+        var today = new Date();
         ctrl.race = {
-          date: new Date(),
+          date: today.getUTCFullYear() + '-' + (today.getUTCMonth() + 1) + '-' + today.getUTCDate(),
           participations: [],
           timekeepers: []
         };

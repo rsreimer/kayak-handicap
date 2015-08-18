@@ -16,9 +16,14 @@ var app = {
     template: './src/components/**/*.html',
     vendor: {
       style: [
-        './bower_components/bootstrap/dist/css/bootstrap.min.css'
+        './bower_components/bootstrap/dist/css/bootstrap.min.css',
+        './bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css'
       ],
       script: [
+        './bower_components/jquery/dist/jquery.min.js',
+        './bower_components/bootstrap/dist/js/bootstrap.min.js',
+        './bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+        './bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.da.min.js',
         './bower_components/angular/angular.min.js',
         './bower_components/angular-animate/angular-animate.min.js',
         './bower_components/angular-touch/angular-touch.min.js',
