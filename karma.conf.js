@@ -4,11 +4,8 @@ module.exports = function (config) {
   config.set({
     frameworks: ['jasmine'],
     files: [
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-touch.min.js',
-      'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-mocks.js',
+      'dist/vendor*.js',
+      'bower_components/angular-mocks/angular-mocks.js',
       'dist/app*.js',
       'test/*.js'
     ],

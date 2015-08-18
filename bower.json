@@ -5,6 +5,7 @@
     "angular": "~1.4.4",
     "angular-animate": "~1.4.4",
     "angular-touch": "~1.4.4",
+    "angular-mocks": "~1.4.4",
     "angular-ui-router": "~0.2.15",
     "angular-ui-mask": "~1.4.2",
     "bootstrap": "~3.3.5"
