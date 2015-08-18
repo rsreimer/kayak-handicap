@@ -48,8 +48,9 @@ angular.module('kayak-handicap')
           return new Array(boatType.seats);
         };
 
-        if (ctrl.race.participations.length === 0)
+        if (ctrl.race.participations.length === 0) {
           ctrl.addParticipation();
+        }
       }
     };
   });

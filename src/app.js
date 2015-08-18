@@ -4,7 +4,7 @@ angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router', 'ui.mask'
 
     // Google Analytics
     $rootScope.$on('$stateChangeSuccess', function(){
-      if (!$window.ga) return;
+      if (!$window.ga) {return;}
       $window.ga('send', 'pageview', { page: $location.path() });
     });
   })
