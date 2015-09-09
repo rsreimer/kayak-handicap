@@ -9,6 +9,8 @@
     "angular-ui-router": "~0.2.15",
     "angular-ui-mask": "~1.4.2",
     "bootstrap": "~3.3.5",
-    "bootstrap-datepicker": "https://github.com/eternicode/bootstrap-datepicker.git#46e4787a3c"
+    "bootstrap-datepicker": "https://github.com/eternicode/bootstrap-datepicker.git#46e4787a3c",
+    "angular-ui-select": "~0.12.1",
+    "angular-sanitize": "~1.4.4"
   }
 }

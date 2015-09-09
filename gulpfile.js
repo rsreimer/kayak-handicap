@@ -17,18 +17,24 @@ var app = {
     vendor: {
       style: [
         './bower_components/bootstrap/dist/css/bootstrap.min.css',
-        './bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css'
+        './bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
+        './bower_components/angular-ui-select/dist/select.min.css'
       ],
       script: [
         './bower_components/jquery/dist/jquery.min.js',
+
         './bower_components/bootstrap/dist/js/bootstrap.min.js',
         './bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
         './bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.da.min.js',
+
         './bower_components/angular/angular.min.js',
         './bower_components/angular-animate/angular-animate.min.js',
         './bower_components/angular-touch/angular-touch.min.js',
+        './bower_components/angular-sanitize/angular-sanitize.min.js',
+
+        './bower_components/angular-ui-router/release/angular-ui-router.min.js',
         './bower_components/angular-ui-mask/dist/mask.min.js',
-        './bower_components/angular-ui-router/release/angular-ui-router.min.js'
+        './bower_components/angular-ui-select/dist/select.min.js'
       ]
     }
   },
