@@ -6,60 +6,62 @@
 //
 /////////////////////////////////////////////////////////////////////////////////////
 var app = {
-  module: 'kayak-handicap',
-  port: 8000,
-  index: './src/index.html',
-  test: {
-    spec: './test',
-    karmaConf: __dirname + '/karma.conf.js'
-  },
-  output: './dist/',
-  packages: [
-    {
-      name: 'app',
-      style: [
-        './src/components/**/app.scss',
-        './src/components/**/*.scss'
-      ],
-      script: [
-        './src/components/**/app.js',
-        './src/components/**/*.js'
-      ],
-      template: ['./src/components/**/*.html']
+    module: 'kayak-handicap',
+    port: 8000,
+    index: './src/index.html',
+    test: {
+        spec: './test',
+        karmaConf: __dirname + '/karma.conf.js'
     },
-    {
-      name: 'vendor',
-      style: ['./bower_components/bootstrap/dist/css/bootstrap.min.css'],
-      script: [
-        './bower_components/angular/angular.min.js',
-        './bower_components/angular-animate/angular-animate.min.js',
-        './bower_components/angular-touch/angular-touch.min.js',
-        './bower_components/angular-ui-router/release/angular-ui-router.min.js'
-      ]
-    },
-    {
-      name: 'admin',
-      style: ['./src/admin/**/*.scss'],
-      script: ['./src/admin/**/*.js'],
-      template: ['./src/admin/**/*.html'],
-    },
-    {
-      name: 'admin-vendor',
-      style: [
-          './bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
-          './bower_components/angular-ui-select/dist/select.min.css'
-      ],
-      script: [
-        './bower_components/jquery/dist/jquery.min.js',
-        './bower_components/bootstrap/dist/js/bootstrap.min.js',
-        './bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
-        './bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.da.min.js',
-        './bower_components/angular-sanitize/angular-sanitize.min.js',
-        './bower_components/angular-ui-mask/dist/mask.min.js',
-        './bower_components/angular-ui-select/dist/select.min.js'
-      ]
-    }
-  ]
+    output: './dist/',
+    sourcePackages: [
+        {
+            name: 'app',
+            style: [
+                './src/components/**/app.scss',
+                './src/components/**/*.scss'
+            ],
+            script: [
+                './src/components/**/app.js',
+                './src/components/**/*.js'
+            ],
+            template: ['./src/components/**/*.html']
+        },
+        {
+            name: 'admin',
+            style: ['./src/admin/**/*.scss'],
+            script: ['./src/admin/**/*.js'],
+            template: ['./src/admin/**/*.html']
+        }
+    ],
+    vendorPackages: [
+        {
+            name: 'vendor',
+            style: ['./bower_components/bootstrap/dist/css/bootstrap.min.css'],
+            script: [
+                './bower_components/angular/angular.min.js',
+                './bower_components/angular-animate/angular-animate.min.js',
+                './bower_components/angular-touch/angular-touch.min.js',
+                './bower_components/angular-ui-router/release/angular-ui-router.min.js'
+            ]
+        },
+        {
+            name: 'admin-vendor',
+            style: [
+                './bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
+                './bower_components/angular-ui-select/dist/select.min.css'
+            ],
+            script: [
+                './bower_components/jquery/dist/jquery.min.js',
+                './bower_components/bootstrap/dist/js/bootstrap.min.js',
+                './bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
+                './bower_components/bootstrap-datepicker/dist/locales/bootstrap-datepicker.da.min.js',
+                './bower_components/angular-sanitize/angular-sanitize.min.js',
+                './bower_components/angular-ui-mask/dist/mask.min.js',
+                './bower_components/angular-ui-select/dist/select.min.js'
+            ]
+        }
+    ]
 };
 
 
@@ -70,24 +72,24 @@ var app = {
 /////////////////////////////////////////////////////////////////////////////////////
 
 var gulp = require('gulp'),
-  webserver = require('gulp-webserver'),
-  babel = require('gulp-babel'),
-  del = require('del'),
-  sass = require('gulp-sass'),
-  jshint = require('gulp-jshint'),
-  sourcemaps = require('gulp-sourcemaps'),
-  ngAnnotate = require('gulp-ng-annotate'),
-  minifyHtml = require('gulp-minify-html'),
-  merge = require('merge-stream'),
-  angularTemplateCache = require("gulp-angular-templatecache"),
-  remember = require('gulp-remember'),
-  cache = require('gulp-cached'),
-  concat = require('gulp-concat'),
-  uglify = require('gulp-uglify'),
-  csso = require('gulp-csso'),
-  CacheBuster = require('gulp-cachebust'),
-  cachebust = new CacheBuster(),
-  KarmaServer = require('karma').Server;
+    webserver = require('gulp-webserver'),
+    babel = require('gulp-babel'),
+    del = require('del'),
+    sass = require('gulp-sass'),
+    jshint = require('gulp-jshint'),
+    sourcemaps = require('gulp-sourcemaps'),
+    ngAnnotate = require('gulp-ng-annotate'),
+    minifyHtml = require('gulp-minify-html'),
+    merge = require('merge-stream'),
+    angularTemplateCache = require("gulp-angular-templatecache"),
+    remember = require('gulp-remember'),
+    cache = require('gulp-cached'),
+    concat = require('gulp-concat'),
+    uglify = require('gulp-uglify'),
+    csso = require('gulp-csso'),
+    CacheBuster = require('gulp-cachebust'),
+    cachebust = new CacheBuster(),
+    KarmaServer = require('karma').Server;
 
 /////////////////////////////////////////////////////////////////////////////////////
 //
@@ -96,7 +98,7 @@ var gulp = require('gulp'),
 /////////////////////////////////////////////////////////////////////////////////////
 
 gulp.task('clean', function (cb) {
-  del([app.output.folder], cb);
+    del([app.output], cb);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -105,23 +107,23 @@ gulp.task('clean', function (cb) {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-css', ['clean'], function() {
-  // Vendor
-  gulp.src(app.source.vendor.style)
-    .pipe(concat(app.output.vendor.style))
-    .pipe(cachebust.resources())
-    .pipe(gulp.dest(app.output.folder));
+gulp.task('build-css', ['clean'], function () {
+    // Vendor
+    gulp.src(app.source.vendor.style)
+        .pipe(concat(app.output.vendor.style))
+        .pipe(cachebust.resources())
+        .pipe(gulp.dest(app.output.folder));
 
-  return gulp.src(app.source.style)
-    .pipe(sourcemaps.init())
-    .pipe(cache('style'))
-    .pipe(sass())
-    .pipe(csso())
-    .pipe(remember('style'))
-    .pipe(concat(app.output.style))
-    .pipe(cachebust.resources())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(app.output.folder));
+    return gulp.src(app.source.style)
+        .pipe(sourcemaps.init())
+        .pipe(cache('style'))
+        .pipe(sass())
+        .pipe(csso())
+        .pipe(remember('style'))
+        .pipe(concat(app.output.style))
+        .pipe(cachebust.resources())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(app.output.folder));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -130,11 +132,11 @@ gulp.task('build-css', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('jshint', function() {
-  gulp.src(app.source.script)
-    .pipe(cache('jshint'))
-    .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'));
+gulp.task('jshint', function () {
+    gulp.src(app.source.script)
+        .pipe(cache('jshint'))
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish'));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -143,10 +145,10 @@ gulp.task('jshint', function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('test', ['build-js'], function(done) {
-  new KarmaServer({
-    configFile: app.test.karmaConf
-  }, done).start();
+gulp.task('test', ['build-js'], function (done) {
+    new KarmaServer({
+        configFile: app.test.karmaConf
+    }, done).start();
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -155,37 +157,37 @@ gulp.task('test', ['build-js'], function(done) {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build-js', ['clean'], function() {
-  // Vendor
-  gulp.src(app.source.vendor.script)
-    .pipe(concat(app.output.vendor.script))
-    .pipe(cachebust.resources())
-    .pipe(gulp.dest(app.output.folder));
+gulp.task('build-js', ['clean'], function () {
+    // Vendor
+    gulp.src(app.source.vendor.script)
+        .pipe(concat(app.output.vendor.script))
+        .pipe(cachebust.resources())
+        .pipe(gulp.dest(app.output.folder));
 
-  // Template cache
-  var templates = gulp.src(app.source.template)
-    .pipe(cache('template'))
-    .pipe(minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe(remember('template'))
-    .pipe(angularTemplateCache({
-      module: app.module
-    }));
+    // Template cache
+    var templates = gulp.src(app.source.template)
+        .pipe(cache('template'))
+        .pipe(minifyHtml({
+            empty: true,
+            spare: true,
+            quotes: true
+        }))
+        .pipe(remember('template'))
+        .pipe(angularTemplateCache({
+            module: app.module
+        }));
 
-  return merge(gulp.src(app.source.script), templates)
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(cache('script'))
-    .pipe(babel())
-    .pipe(ngAnnotate())
-    .pipe(uglify())
-    .pipe(remember('script'))
-    .pipe(concat(app.output.script))
-    .pipe(cachebust.resources())
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(app.output.folder));
+    return merge(gulp.src(app.source.script), templates)
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(cache('script'))
+        .pipe(babel())
+        .pipe(ngAnnotate())
+        .pipe(uglify())
+        .pipe(remember('script'))
+        .pipe(concat(app.output.script))
+        .pipe(cachebust.resources())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest(app.output.folder));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -194,15 +196,15 @@ gulp.task('build-js', ['clean'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('build', ['clean', 'build-css', 'jshint', 'build-js'], function() {
-  return gulp.src(app.source.index)
-    .pipe(cachebust.references())
-    .pipe(minifyHtml({
-      empty: true,
-      spare: true,
-      quotes: true
-    }))
-    .pipe(gulp.dest(app.output.folder));
+gulp.task('build', ['clean', 'build-css', 'jshint', 'build-js'], function () {
+    return gulp.src(app.source.index)
+        .pipe(cachebust.references())
+        .pipe(minifyHtml({
+            empty: true,
+            spare: true,
+            quotes: true
+        }))
+        .pipe(gulp.dest(app.output.folder));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -211,9 +213,9 @@ gulp.task('build', ['clean', 'build-css', 'jshint', 'build-js'], function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('watch', function() {
-  var src = app.source;
-  return gulp.watch([src.index, src.script, src.style, src.template, src.vendor.script, src.vendor.style], ['build']);
+gulp.task('watch', function () {
+    var src = app.source;
+    return gulp.watch([src.index, src.script, src.style, src.template, src.vendor.script, src.vendor.style], ['build']);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -222,14 +224,14 @@ gulp.task('watch', function() {
 //
 /////////////////////////////////////////////////////////////////////////////////////
 
-gulp.task('serve', ['watch','build'], function() {
-  gulp.src(app.output.folder)
-    .pipe(webserver({
-      port: app.port,
-      livereload: true,
-      fallback: app.output.index,
-      open: 'http://localhost:' + app.port
-    }));
+gulp.task('serve', ['watch', 'build'], function () {
+    gulp.src(app.output.folder)
+        .pipe(webserver({
+            port: app.port,
+            livereload: true,
+            fallback: app.output.index,
+            open: 'http://localhost:' + app.port
+        }));
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
