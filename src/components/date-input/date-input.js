@@ -16,8 +16,7 @@ angular.module('kayak-handicap')
           format: "yyyy-mm-dd",
           weekStart: 1,
           language: "da",
-          calendarWeeks: true,
-          todayHighlight: true
+          calendarWeeks: true
         });
 
         $element.on('changeDate', date => {
