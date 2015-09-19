@@ -1,0 +1,9 @@
+<form novalidate class="person-form">
+    <input ng-model="person.name" class="form-control" placeholder="Full name" required>
+    <input ng-model="person.club" class="form-control" placeholder="Club">
+
+    <label>Male <input ng-model="person.sex" type="radio" name="sex" value="male"></label>
+    <label>Female <input ng-model="person.sex" type="radio" name="sex" value="female"></label>
+
+    <input type="submit" ng-click="form.save(person)" value="Save" />
+</form>
