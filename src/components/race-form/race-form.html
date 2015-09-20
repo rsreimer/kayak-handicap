@@ -1,41 +1,36 @@
 <div class="race-form">
     <h2 class="form-inline">Handicap race</h2>
 
-    <date-input value="form.race.date"></date-input>
-
     <hr>
 
-    New rower? Add a rower:
-    <person-form></person-form>
-
-    <h3>Timekeepers</h3>
-    <div class="form-group">
-        <button class="btn btn-default" ng-click="form.addTimekeeper()"><span class="glyphicon glyphicon-plus"></span> Add timekeeper</button>
-    </div>
-
-    <div class="form-inline">
-        <div class="form-group" ng-repeat="timekeeper in form.race.timekeepers track by $index">
-            <div class="input-group">
+    <div class="row">
+        <div class="col-sm-6">
+            <h3>Date</h3>
+            <date-input value="form.race.date"></date-input>
+        </div>
+        <div class="col-sm-6">
+            <h3>Timekeepers</h3>
+            <div class="input-group" ng-repeat="timekeeper in form.race.timekeepers track by $index">
                 <select class="form-control"
-                        ng-options="member.name for member in form.members track by member.id"
+                        ng-options="member.name for member in form.members track by item.id"
                         ng-model="form.race.timekeepers[$index]"></select>
                 <span class="input-group-addon" ng-click="form.race.timekeepers.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></span>
             </div>
+            <button class="btn btn-default" ng-click="form.addTimekeeper()"><span class="glyphicon glyphicon-plus"></span> Add timekeeper</button>
         </div>
     </div>
 
-    <h3>Participations</h3>
-    <div class="form-group">
-        <button class="btn btn-default" ng-click="form.addParticipation()"><span class="glyphicon glyphicon-plus"></span> Add participation</button>
-    </div>
+    <hr>
 
-    <table class="table">
+    <h3>Participations</h3>
+    <table class="table participations">
         <thead>
         <tr>
             <th>Boat type</th>
             <th>Participant</th>
             <th>Start</th>
             <th>End</th>
+            <th></th>
             <th></th>
         </tr>
         </thead>
@@ -45,7 +40,8 @@
                 <!-- Boat type -->
                 <select class="form-control"
                         ng-options="boatType.name for boatType in form.boatTypes track by boatType.id"
-                        ng-model="participation.boatType"></select>
+                        ng-model="participation.boatType"
+                        required></select>
             </td>
 
             <td>
@@ -53,7 +49,8 @@
                 <span ng-repeat="i in form.getSeats(participation.boatType) track by $index">
                     <select class="form-control"
                             ng-options="member.name for member in form.members track by member.id"
-                            ng-model="participation.participants[$index]"></select>
+                            ng-model="participation.participants[$index]"
+                            required></select>
                 </span>
             </td>
             <td>
@@ -63,13 +60,19 @@
             <td>
                 <!-- End time -->
                 <time-input ng-hide="participation.didNotFinish" value="participation.end"></time-input>
-                <label><input type="checkbox" ng-model="participation.didNotFinish"> Did not finish</label>
-
+            </td>
+            <td>
+                <div class="checkbox">
+                    <label><input type="checkbox" ng-model="participation.didNotFinish"> Did not finish</label>
+                </div>
             </td>
             <td><button class="btn btn-default pull-right" ng-click="form.race.participations.splice($index, 1)"><span class="glyphicon glyphicon-remove"></span></button></td>
         </tr>
         </tbody>
     </table>
+    <div class="form-group">
+        <button class="btn btn-default" ng-click="form.addParticipation()"><span class="glyphicon glyphicon-plus"></span> Add participation</button>
+    </div>
 
     <div class="well">
         <button class="btn btn-primary" ng-click="form.save()">Save race</button>

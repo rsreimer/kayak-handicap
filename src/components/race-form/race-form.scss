@@ -1,0 +1,10 @@
+.race-form {
+  .participations th:nth-child(3),
+  .participations th:nth-child(4) {
+    width: 100px;
+  }
+
+  .participations th:nth-child(5) {
+    width: 150px;
+  }
+}
