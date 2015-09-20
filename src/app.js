@@ -15,7 +15,7 @@ angular.module('kayak-handicap', ['ngAnimate', 'ngTouch', 'ui.router', 'ui.mask'
     $stateProvider
       .state('addRace', {
         url: '/',
-        template: '<race-form>'
+        template: '<race-form></race-form>'
       });
 
     $urlRouterProvider.otherwise('/');
