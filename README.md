@@ -1,1 +1,1 @@
-# kayak-handicap
+# kajakhandicap.dk
